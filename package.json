@@ -1,0 +1,52 @@
+{
+  "name": "credimate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "electron/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently -k \"npm:dev:react\" \"npm:dev:electron\"",
+    "dev:react": "cd frontend && vite",
+    "dev:electron": "wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
+    "build:react": "cd frontend && vite build",
+    "build": "npm run build:react && electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.creditmate.app",
+    "productName": "CreditMate",
+    "asar": true,
+    "files": [
+      "dist/**",
+      "frontend/dist/**",
+      "electron/**",
+      "package.json",
+      "templates/**"
+    ],
+    "extraResources": [
+      { "from": "electron/templates", "to": "templates" },
+      { "from": "frontend/dist", "to": "frontdist" }
+    ],
+    "win": { "target": "nsis" },
+    "linux": { "target": ["AppImage"] }
+  },
+  "keywords": [],
+  "author": "Cristhian",
+  "license": "ISC",
+  "packageManager": "pnpm@10.14.0",
+  "type": "module",
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "date-fns": "^4.1.0",
+    "handlebars": "^4.7.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "concurrently": "^9.2.0",
+    "electron": "^37.2.6",
+    "cross-env": "^10.0.0",
+    "electron-builder": "^26.0.12",
+    "vite": "^7.1.2",
+    "wait-on": "^8.0.4"
+  }
+}
