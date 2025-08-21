@@ -7,6 +7,8 @@ contextBridge.exposeInMainWorld('api', {
     list: () => ipcRenderer.invoke('clients:list'),
     create: (data) => ipcRenderer.invoke('clients:create', data),
     update: (data) => ipcRenderer.invoke('clients:update', data),
+    search: (searchTerm) => ipcRenderer.invoke('clients:search', searchTerm),
+    getById: (id) => ipcRenderer.invoke('clients:getById', id),
     remove: (id) => ipcRenderer.invoke('clients:remove', id)
   },
   credits: {

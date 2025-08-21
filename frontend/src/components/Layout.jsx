@@ -87,7 +87,7 @@ export default function Layout({ darkMode, toggleDarkMode,header, children }) {
           src={AppLogo}
           alt="App Logo"
           sx={{ 
-            height: 40, 
+            height: 65, 
             mr: 1,
           }}
           component="img"

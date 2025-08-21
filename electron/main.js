@@ -62,9 +62,13 @@ app.whenReady().then(async () => {
 
 // IPCs (DB)
 ipcMain.handle('clients:list', () => dbAPI.listClients(db))
-ipcMain.handle('clients:create', (_e, payload) => dbAPI.createClient(db, payload))
+ipcMain.handle('clients:create', (_e, payload) => 
+  dbAPI.createClient(db, payload)
+)
+ipcMain.handle('clients:search', (_e, searchTerm) => dbAPI.searchClients(db, searchTerm))
 ipcMain.handle('clients:update', (_e, payload) => dbAPI.updateClient(db, payload))
 ipcMain.handle('clients:remove', (_e, id) => dbAPI.removeClient(db, id))
+ipcMain.handle('clients:getById', (_e, id) => dbAPI.getClientById(db, id))
 
 ipcMain.handle('credits:listByClient', (_e, clientId) => dbAPI.listCreditsByClient(db, clientId))
 ipcMain.handle('credits:create', (_e, payload) => dbAPI.createCredit(db, payload))

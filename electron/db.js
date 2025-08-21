@@ -55,10 +55,19 @@ export const dbAPI = {
     INSERT INTO clients (doc, name, lastname, email, phone, address)
     VALUES (@doc, @name, @lastname, @email, @phone, @address)
   `).run(c),
+
   updateClient: (db, c) => db.prepare(`
     UPDATE clients SET doc=@doc, name=@name, lastname=@lastname, email=@email, phone=@phone, address=@address
     WHERE id=@id
   `).run(c),
+
+  searchClients: (db, searchTerm) => db.prepare(`
+    SELECT * FROM clients WHERE name LIKE ? OR lastname LIKE ? OR doc LIKE ?
+    ORDER BY created_at DESC
+  `).all(`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`),
+
+  getClientById: (db, id) => db.prepare(`SELECT * FROM clients WHERE id=?`).get(id),
+
   removeClient: (db, id) => db.prepare(`DELETE FROM clients WHERE id=?`).run(id),
 
   // Credits
@@ -77,16 +86,20 @@ export const dbAPI = {
   listPaymentsByCredit: (db, creditId) => db.prepare(`
     SELECT * FROM payments WHERE credit_id=? ORDER BY paid_at DESC
   `).all(creditId),
+  
   registerPayment: (db, p) => db.prepare(`
     INSERT INTO payments (credit_id, fee_id, paid_at, receipt_number, amount)
     VALUES (@credit_id, @fee_id, @paid_at, @receipt_number, @amount)
   `).run(p),
+
   updateFeeStatus: (db, { id, status }) => db.prepare(`
     UPDATE fees SET status=? WHERE id=?
   `).run(status, id),
+
   getAllFeesByCredit: (db, creditId) => db.prepare(`
     SELECT * FROM fees WHERE credit_id=? ORDER BY paid_at DESC
   `).all(creditId),
+
   getFeesByClient: (db, clientId) => db.prepare(`
     SELECT * FROM fees WHERE credit_id IN (SELECT id FROM credits WHERE client_id=?) ORDER BY paid_at DESC
   `).all(clientId)
