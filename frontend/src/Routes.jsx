@@ -13,6 +13,7 @@ import Profile from '@/routes/User/Profile';
 // const PersonShow = lazy(() => import("@/routes/Persons/Show"));
 const AccessDenied = lazy(() => import("@/routes/Errors/AccessDenied"));
 import ClientsIndex from "./routes/Clients/Index";
+import Show from "./routes/Clients/Show";
 
 export default function AppRoutes() {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -44,9 +45,9 @@ export default function AppRoutes() {
                     <Route path="/clientes" 
                         element={ <ClientsIndex setHeaderDescription={setHeaderDescription}/> } 
                     />
-                    {/* <Route path="/clientes/show/:id" 
-                        element={ <CountryShow setHeaderDescription={setHeaderDescription}/> } 
-                    /> */}
+                    <Route path="/clientes/show/:id" 
+                        element={ <Show setHeaderDescription={setHeaderDescription}/> } 
+                    />
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>

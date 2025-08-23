@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link as RouterLink } from "react-router-dom";
-import { api } from "../../api/axios";
 import {
     Box,
     Breadcrumbs,
@@ -13,8 +12,10 @@ import {
     Link,
     Stack
   } from '@mui/material';
-  import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-const Show = () => {
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { api } from '../../api';
+
+export default function Show({setHeaderDescription}) {
     const { id } = useParams();
     const navigate = useNavigate();
     const [item, setItem] = useState(null);
@@ -25,9 +26,10 @@ const Show = () => {
       // Simula una llamada a API, reemplaza con tu fetch real
       const fetchItem = async () => {
         try {
-          const response = await api.get(`/api/countries/${id}?wantsJson=true`);
-          if (!response.data) throw new Error('Error al cargar el recurso');
-          const data = response.data.data;
+          const response = await api.clients.getById( id);
+          console.log('Response:', response);
+          if (!response) throw new Error('Error al cargar el recurso');
+          const data = response;
           setItem(data);
         } catch (err) {
           setError(err.message);
@@ -62,8 +64,8 @@ const Show = () => {
             <Link component={RouterLink} to="/" underline="hover" color="inherit">
               Inicio
             </Link>
-            <Link component={RouterLink} to="/paises" underline="hover" color="inherit">
-              Paises
+            <Link component={RouterLink} to="/clientes" underline="hover" color="inherit">
+              Clientes
             </Link>
             <Typography color="text.primary">{item.name}</Typography>
           </Breadcrumbs>
@@ -82,9 +84,9 @@ const Show = () => {
           <Card>
             <CardContent>
               <Stack spacing={2}>
-                <Typography variant="h5">{item.country_name}</Typography>
+                <Typography variant="h5">{item.name}</Typography>
                 <Typography variant="body1" color="text.secondary">
-                  {item.country_code}
+                  {item.lastname}
                 </Typography>
               </Stack>
             </CardContent>
@@ -93,4 +95,4 @@ const Show = () => {
       );
 };
 
-export default Show;
+// export default Show;

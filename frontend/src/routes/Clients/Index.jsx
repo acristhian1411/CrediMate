@@ -1,6 +1,5 @@
 // generate a list of clients with material-ui tables
 import React from 'react';
-import { api } from '../../api';
 import { useEffect, useState, lazy, Suspense} from 'react';
 import { 
     Table, 
@@ -17,10 +16,13 @@ import {
     Tab
  } from '@mui/material';
 import AlertMessage from "@/components/Alert";
+import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 const MidModal = lazy(() => import("@/components/Modal"));
 const DeleteDialog = lazy(() => import("@/components/DeleteDialog"));
-import SearchIcon from "@mui/icons-material/Search";
 import Form from './Form';
+import { api } from '../../api';
 
 
 export default function ClientsIndex({setHeaderDescription}) {
@@ -31,6 +33,7 @@ export default function ClientsIndex({setHeaderDescription}) {
   const [alert, setAlert] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [edit, setEdit] = useState(false);
+  const navigate = useNavigate();
 
   const load = async () => {
     setClients(await api.clients.list());
@@ -140,9 +143,11 @@ export default function ClientsIndex({setHeaderDescription}) {
                 <TableCell>{client.phone}</TableCell>
                 <TableCell>{client.address}</TableCell>
                 <TableCell>
-                  <Button variant="contained" color="info" onClick={() => openModalForm(client, false)}>
-                    Ver
-                  </Button>
+                  <Link to={`/clientes/show/${client.id}`} style={{ textDecoration: 'none' }}>
+                    <Button variant="contained" color="info" >
+                      Ver
+                    </Button>
+                  </Link>
                 </TableCell>
                 <TableCell>
                   <Button variant="contained" color="warning" onClick={() => openModalForm(client, true)}>
