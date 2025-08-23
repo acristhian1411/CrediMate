@@ -24,16 +24,7 @@ export default function Form({onClose, edit, client, showAlert}) {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const data = new FormData();
-      data.append('doc', formData.doc);
-      data.append('name', formData.name);
-      data.append('lastname', formData.lastname);
-      data.append('email', formData.email);
-      data.append('phone', formData.phone);
-      data.append('address', formData.address);
-       console.log('data to submit: ', Object.fromEntries(data.entries()))
-      await api.clients.create(data)
-      
+      await api.clients.create(formData)
       showAlert("Cliente creado exitosamente", "success");
     } catch (err) {
       console.error(err);

@@ -62,8 +62,9 @@ app.whenReady().then(async () => {
 
 // IPCs (DB)
 ipcMain.handle('clients:list', () => dbAPI.listClients(db))
-ipcMain.handle('clients:create', (_e, payload) => 
-  dbAPI.createClient(db, payload)
+ipcMain.handle('clients:create', (_e, payload) => {
+  return dbAPI.createClient(db, payload)
+}
 )
 ipcMain.handle('clients:search', (_e, searchTerm) => dbAPI.searchClients(db, searchTerm))
 ipcMain.handle('clients:update', (_e, payload) => dbAPI.updateClient(db, payload))
