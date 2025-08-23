@@ -12,7 +12,6 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-  useTheme,
   Button,
 } from '@mui/material';
 import {
@@ -27,7 +26,7 @@ const drawerWidth = 240;
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import AppLogo from '../assets/AppLogo.png';
 
-export default function Layout({ darkMode, toggleDarkMode,header, children }) {
+export default function Layout({ darkMode, toggleDarkMode,header }) {
   // const theme = useTheme();
   const [open, setOpen] = React.useState(() => {
     const stored = localStorage.getItem('sidebar_open');

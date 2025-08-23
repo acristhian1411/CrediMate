@@ -20,7 +20,6 @@ export default function App () {
     [darkMode]
   );
   const load = async () => {
-    console.log('funcion para optener clientes: ', api)
     setClients(await api.clients.list())
   }
 

@@ -17,7 +17,7 @@ import {
  } from '@mui/material';
 import AlertMessage from "@/components/Alert";
 import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 const MidModal = lazy(() => import("@/components/Modal"));
 const DeleteDialog = lazy(() => import("@/components/DeleteDialog"));
@@ -33,7 +33,7 @@ export default function ClientsIndex({setHeaderDescription}) {
   const [alert, setAlert] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [edit, setEdit] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const load = async () => {
     setClients(await api.clients.list());
