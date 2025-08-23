@@ -143,13 +143,18 @@ export default function Layout({ darkMode, toggleDarkMode,header }) {
           // p: 2,
           // width: '100%',
           minHeight: '100vh',
+          display: "flex", 
+          flexDirection: "column", 
+          alignItems: "center",
+          justifyItems: "center",
+          
           // el border es para debugear estilos
           // border: '1px solid #b21818',
           // borderRadius: 3,
         }}
       >
-        <Toolbar />
         <Outlet/>
+        <Toolbar />
       </Box>
     </Box>
     </ThemeProvider>
