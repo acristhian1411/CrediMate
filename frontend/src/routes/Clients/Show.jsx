@@ -36,6 +36,7 @@ export default function Show({setHeaderDescription}) {
         } finally {
           setLoading(false);
         }
+        setHeaderDescription('Detalle del cliente');
       };
   
       fetchItem();
@@ -84,9 +85,21 @@ export default function Show({setHeaderDescription}) {
           <Card>
             <CardContent>
               <Stack spacing={2}>
-                <Typography variant="h5">{item.name}</Typography>
+                <Typography variant="h5"><b>Nombre: </b>{item.name}</Typography>
                 <Typography variant="body1" color="text.secondary">
-                  {item.lastname}
+                  <b>Apellido: </b>{item.lastname}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  <b>Documento: </b>{item.doc}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  <b>Correo: </b>{item.email}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  <b>Telefono: </b>{item.phone}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  <b>Dirección: </b>{item.address}
                 </Typography>
               </Stack>
             </CardContent>
