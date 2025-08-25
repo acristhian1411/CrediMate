@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('api', {
   },
   credits: {
     listByClient: (clientId) => ipcRenderer.invoke('credits:listByClient', clientId),
+    listAll: () => ipcRenderer.invoke('credits:listAll'),
     create: (data) => ipcRenderer.invoke('credits:create', data),
     updateStatus: (data) => ipcRenderer.invoke('credits:updateStatus', data)
   },

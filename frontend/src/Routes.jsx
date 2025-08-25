@@ -14,6 +14,9 @@ import Profile from '@/routes/User/Profile';
 const AccessDenied = lazy(() => import("@/routes/Errors/AccessDenied"));
 import ClientsIndex from "./routes/Clients/Index";
 import Show from "./routes/Clients/Show";
+import CreditsIndex from "./routes/Credits/Index";
+import CreditShow from "./routes/Credits/Show";
+
 
 export default function AppRoutes() {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -47,6 +50,12 @@ export default function AppRoutes() {
                     />
                     <Route path="/clientes/show/:id" 
                         element={ <Show setHeaderDescription={setHeaderDescription}/> } 
+                    />
+                    <Route path="/creditos" 
+                        element={ <CreditsIndex setHeaderDescription={setHeaderDescription}/> }
+                    />
+                    <Route path="/creditos/show/:id" 
+                        element={ <CreditShow setHeaderDescription={setHeaderDescription}/> }
                     />
                     <Route path="*" element={<NotFound />} />
                 </Route>

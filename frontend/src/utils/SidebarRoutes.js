@@ -41,6 +41,11 @@ export const sidebarRoutes = [
                 name: 'Clientes',
                 icon: HomeIcon,
             },
+            {
+                path: '/creditos',
+                name: 'Créditos',
+                icon: TableChartIcon,
+            }
         ]
     },
     // { 

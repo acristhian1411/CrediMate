@@ -14,7 +14,7 @@ import {
   import ExpandMore from '@mui/icons-material/ExpandMore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { sidebarRoutes } from '@/utils/SidebarRoutes';
-export default function Sidebar({ open, handleDrawerToggle }) {
+export default function Sidebar({ open }) {
     const drawerWidth = 240;
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,9 +22,7 @@ export default function Sidebar({ open, handleDrawerToggle }) {
     const [openGroups, setOpenGroups] = useState({});
     const isRouteActive = (path) => location.pathname === path;
 
-    const goTo = (path) => {
-      navigate(path);
-    };
+    
     const toggleGroup = (groupName) => {
         setOpenGroups((prev) => ({
           ...prev,
@@ -48,7 +46,7 @@ export default function Sidebar({ open, handleDrawerToggle }) {
         <Toolbar />
         <Divider />
         <List>
-      {routes.map((group, index) => {
+      {routes.map((group) => {
         const firstRoute = group.routes?.[0];
         const FirstRouteIcon = firstRoute?.icon;
         const GroupIcon = group.groupicon;
