@@ -140,7 +140,7 @@ export default function Layout({ darkMode, toggleDarkMode,header }) {
         component="main"
         sx={{
           flexGrow: 1,
-          // p: 2,
+          mt: 7,
           // width: '100%',
           minHeight: '100vh',
           display: "flex", 
