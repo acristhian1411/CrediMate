@@ -5,6 +5,7 @@
   "main": "electron/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node electron/migrate.js",
     "dev": "concurrently -k \"npm:dev:react\" \"npm:dev:electron\"",
     "dev:react": "cd frontend && vite",
     "dev:electron": "wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",

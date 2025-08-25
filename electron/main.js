@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import fs from 'node:fs'
 import { initDB, dbAPI } from './db.js'
 import { printContract, printReceipt } from './print.js'
+import { run } from 'node:test'
+import Database from "better-sqlite3";
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -17,6 +19,45 @@ const resolveTemplatePath = (...p) => {
   return app.isPackaged
     ? path.join(process.resourcesPath, 'templates', ...p)
     : path.join(__dirname, 'templates', ...p)
+}
+
+async function runMigrations(dir){
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
+  // 📌 Ruta completa al archivo .db
+  const dbPath = path.join(dir, "creditmate.db");
+  const db = new Database(dbPath);
+const migrationsDir = path.join(process.cwd(), "electron/migrations");
+
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS migrations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    executed_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`).run();
+
+// function runMigrations() {
+  const files = fs.readdirSync(migrationsDir).sort();
+  const executed = new Set(
+    db.prepare("SELECT name FROM migrations").all().map(r => r.name)
+  );
+
+  console.log('\x1b[36m%s\x1b[0m','executed', executed);
+  for (const file of files) {
+    // Usa colores ANSI para resaltar el nombre del archivo
+    console.log('\x1b[36m%s\x1b[0m', 'file', file); // Cyan
+    if (!executed.has(file)) {
+      const sql = fs.readFileSync(path.join(migrationsDir, file), "utf-8");
+      db.exec(sql);
+      db.prepare("INSERT INTO migrations (name) VALUES (?)").run(file);
+      console.log(`✅ Ejecutada: ${file}`);
+    } else {
+      console.log(`⏩ Ya ejecutada: ${file}`);
+    }
+  }
 }
 
 async function createWindow () {
@@ -46,10 +87,10 @@ app.whenReady().then(async () => {
   if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true })
   }
-
   const dbPath = path.join(dbDir, 'creditmate.db')
   db = initDB(dbPath)
-  console.log('DB Inicializada: ', db)
+  // console.log('DB Inicializada: ', db)
+  runMigrations(dbDir) // Corre migraciones pendientes
 
   await createWindow()
 
@@ -72,6 +113,7 @@ ipcMain.handle('clients:remove', (_e, id) => dbAPI.removeClient(db, id))
 ipcMain.handle('clients:getById', (_e, id) => dbAPI.getClientById(db, id))
 
 ipcMain.handle('credits:listByClient', (_e, clientId) => dbAPI.listCreditsByClient(db, clientId))
+ipcMain.handle('credits:listAll', () => dbAPI.listAllCredits(db))
 ipcMain.handle('credits:create', (_e, payload) => dbAPI.createCredit(db, payload))
 ipcMain.handle('credits:updateStatus', (_e, payload) => dbAPI.updateCreditStatus(db, payload))
 

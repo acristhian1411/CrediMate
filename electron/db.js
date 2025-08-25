@@ -28,10 +28,11 @@ export function initDB (dbPath) {
     create table if not exists fees (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       credit_id INTEGER NOT NULL,
-      paid_at TEXT NOT NULL,
-      receipt_number TEXT NOT NULL,
+      paid_at TEXT,
+      receipt_number TEXT,
       status BOOLEAN DEFAULT false,
       amount REAL NOT NULL,
+      amount_paid REAL DEFAULT 0,
       FOREIGN KEY(credit_id) REFERENCES credits(id)
     );
     CREATE TABLE IF NOT EXISTS payments (
@@ -43,6 +44,11 @@ export function initDB (dbPath) {
       amount REAL NOT NULL,
       FOREIGN KEY(credit_id) REFERENCES credits(id),
       FOREIGN KEY(fee_id) REFERENCES fees(id)
+    );
+    CREATE TABLE IF NOT EXISTS migrations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL UNIQUE,
+      executed_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
   `)
   return db
@@ -74,6 +80,12 @@ export const dbAPI = {
   listCreditsByClient: (db, clientId) => db.prepare(`
     SELECT * FROM credits WHERE client_id=? ORDER BY id DESC
   `).all(clientId),
+  listAllCredits: (db) => db.prepare(`
+    SELECT c.*, cl.name || ' ' || cl.lastname AS clientName
+    FROM credits c
+    JOIN clients cl ON c.client_id = cl.id
+    ORDER BY c.id DESC
+  `).all(),
   createCredit: (db, cr) => db.prepare(`
     INSERT INTO credits (client_id, amount, fees_qty, fee_amount, interest_rate, start_date, status)
     VALUES (@client_id, @amount, @fees_qty, @fee_amount, @interest_rate, @start_date, 'active')

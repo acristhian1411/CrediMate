@@ -1,0 +1,2 @@
+-- alter table fees alter column paid_at drop not null;
+-- alter table fees alter column receipt_number drop not null;
