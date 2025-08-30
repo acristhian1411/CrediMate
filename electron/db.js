@@ -80,6 +80,7 @@ export const dbAPI = {
   listCreditsByClient: (db, clientId) => db.prepare(`
     SELECT * FROM credits WHERE client_id=? ORDER BY id DESC
   `).all(clientId),
+  getCreditById: (db, id) => db.prepare(`SELECT * FROM credits WHERE id=?`).get(id),
   listAllCredits: (db) => db.prepare(`
     SELECT c.*, cl.name || ' ' || cl.lastname AS clientName
     FROM credits c

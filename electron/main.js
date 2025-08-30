@@ -45,17 +45,11 @@ db.prepare(`
     db.prepare("SELECT name FROM migrations").all().map(r => r.name)
   );
 
-  console.log('\x1b[36m%s\x1b[0m','executed', executed);
   for (const file of files) {
-    // Usa colores ANSI para resaltar el nombre del archivo
-    console.log('\x1b[36m%s\x1b[0m', 'file', file); // Cyan
     if (!executed.has(file)) {
       const sql = fs.readFileSync(path.join(migrationsDir, file), "utf-8");
       db.exec(sql);
       db.prepare("INSERT INTO migrations (name) VALUES (?)").run(file);
-      console.log(`✅ Ejecutada: ${file}`);
-    } else {
-      console.log(`⏩ Ya ejecutada: ${file}`);
     }
   }
 }
@@ -114,6 +108,7 @@ ipcMain.handle('clients:getById', (_e, id) => dbAPI.getClientById(db, id))
 
 ipcMain.handle('credits:listByClient', (_e, clientId) => dbAPI.listCreditsByClient(db, clientId))
 ipcMain.handle('credits:listAll', () => dbAPI.listAllCredits(db))
+ipcMain.handle('credits:getById', (_e, id) => dbAPI.getCreditById(db, id))
 ipcMain.handle('credits:create', (_e, payload) => dbAPI.createCredit(db, payload))
 ipcMain.handle('credits:updateStatus', (_e, payload) => dbAPI.updateCreditStatus(db, payload))
 

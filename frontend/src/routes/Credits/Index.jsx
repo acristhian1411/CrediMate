@@ -23,6 +23,7 @@ const MidModal = lazy(() => import("@/components/Modal"));
 const DeleteDialog = lazy(() => import("@/components/DeleteDialog"));
 import Form from './Form';
 import { api } from '../../api';
+import { formatNumber } from '@/utils/formatNumbers';
 
 
 export default function CreditsIndex({setHeaderDescription}) {
@@ -91,7 +92,7 @@ export default function CreditsIndex({setHeaderDescription}) {
     <div style={{ padding: 16 }}>
       {/* <h1 align="center">Lista de Clientes</h1> */}
         <TextField 
-            label="Buscar cliente" 
+            label="Buscar crédito por cliente" 
             variant="outlined" 
             style={{ marginBottom: 20, width: '100%', marginTop: 16 }} 
             onKeyDown={(e) => {
@@ -137,15 +138,17 @@ export default function CreditsIndex({setHeaderDescription}) {
               <TableRow key={credit.id}>
                 <TableCell>{credit.id}</TableCell>
                 <TableCell>{credit.clientName}</TableCell>
-                <TableCell>{credit.amount}</TableCell>
-                <TableCell>{credit.date}</TableCell>
-                <TableCell>{credit.status}</TableCell>
+                <TableCell>{formatNumber(credit.amount)}</TableCell>
+                <TableCell>{credit.start_date}</TableCell>
+                <TableCell>{credit.status == 'active' ? 'Activo' : 'Inactivo'}</TableCell>
                 <TableCell>
                   <Link to={`/creditos/show/${credit.id}`} style={{ textDecoration: 'none' }}>
                     <Button variant="contained" color="info" >
                       Ver
                     </Button>
                   </Link>
+                  </TableCell>
+                  <TableCell>
                   <Button variant="contained" color="warning" onClick={() => openModalForm(credit, true)}>
                     Editar
                   </Button>

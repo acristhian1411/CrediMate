@@ -8,18 +8,27 @@ import {
   Grid
 } from "@mui/material";
 import {api} from "../../api";
+import { formatNumber,disFormatNumber } from "../../utils/formatNumbers";
 
-export default function Form({onClose, edit, client, showAlert}) {
+export default function Form({onClose, edit, credit, showAlert}) {
+  let date = new Date();
   const [formData, setFormData] = useState({
-    id: client?.id || "",
-    doc: client?.doc || "",
-    name: client?.name || "",
-    lastname: client?.lastname || "",
-    email: client?.email || "",
-    phone: client?.phone || "",
-    address: client?.address || "",
+    id: credit?.id || "",
+    client_id: credit?.client_id || "",
+    amount: credit?.amount || "",
+    fees_qty: credit?.fees_qty || "",
+    fee_amount: credit?.fee_amount || "",
+    interest_rate: credit?.interest_rate || "",
+    start_date: credit?.start_date || date.toISOString().split("T")[0],
+    status: credit?.status || "",
   });
 
+  const handleFeeAmountChange = (e) => {
+    console.log('e.target.value: ',e.target.value);
+    const value = parseFloat(disFormatNumber(e.target.value));
+    console.log('value: ',value);
+    setFormData(f => ({ ...f, fee_amount: value }));
+  };
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -28,7 +37,7 @@ export default function Form({onClose, edit, client, showAlert}) {
       showAlert("Crédito creado exitosamente", "success");
     } catch (err) {
       console.error(err);
-      showAlert("Error al crear Cliente", "error");
+      showAlert("Error al crear Crédito", "error");
     }
   };
   const handleEdit = async (e) => {
@@ -38,7 +47,7 @@ export default function Form({onClose, edit, client, showAlert}) {
       showAlert("Crédito editado exitosamente", "success");
     } catch (err) {
       console.error(err);
-      showAlert("Error al editar Cliente", "error");
+      showAlert("Error al editar Crédito", "error");
     }
   };
 
@@ -51,64 +60,72 @@ export default function Form({onClose, edit, client, showAlert}) {
       sx={{ maxWidth: 500, mx: "auto", mt: 4 }}
     >
       <Typography variant="h5" gutterBottom align="center" sx={{ mb: 3 }}>
-        {edit ? "Editar Cliente" : "Crear nuevo Cliente"}
+        {edit ? "Editar Crédito" : "Crear nuevo Crédito"}
       </Typography>
 
       {/* <Stack spacing={2}> */}
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>    
+            {/* 
+            // TODO: Implementar búsqueda de clientes
+            */}
             <TextField
-              label="Documento"
-              name="doc"
-              value={formData.doc}
-              onChange={e => setFormData(f => ({ ...f, doc: e.target.value }))}
+              label="Cliente"
+              amount="client_id"
+              value={formData.client_id}
+              onChange={e => setFormData(f => ({ ...f, client_id: e.target.value }))}
               fullWidth
             />
           </Grid>
           <Grid item xs={12} sm={6}>        
             <TextField
-              label="Nombre"
-              name="name"
-              value={formData.name}
-              onChange={e => setFormData(f => ({ ...f, name: e.target.value }))}
+              label="Monto total"
+              amount="amount"
+              type="number"
+              value={formData.amount}
+              onChange={e => setFormData(f => ({ ...f, amount: e.target.value }))}
               required
               fullWidth
             />
           </Grid>
           <Grid item xs={12} sm={6}>        
             <TextField
-              label="Apellido"
-              name="lastname"
-              value={formData.lastname}
-              onChange={e => setFormData(f => ({ ...f, lastname: e.target.value }))}
+              label="Cantidad de cuotas"
+              amount="fees_qty"
+              type="number"
+              value={formData.fees_qty}
+              onChange={e => setFormData(f => ({ ...f, fees_qty: e.target.value }))}
               required
               fullWidth
             />
           </Grid>
           <Grid item xs={12} sm={6}>        
             <TextField
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={e => setFormData(f => ({ ...f, email: e.target.value }))}
+              label="Monto por cuota"
+              amount="fee_amount"
+              type="text"
+              value={formatNumber(formData.fee_amount)}
+              onChange={handleFeeAmountChange}
               fullWidth
             />
           </Grid>
           <Grid item xs={12} sm={6}>            
             <TextField
-              label="Teléfono"
-              name="phone"
-              value={formData.phone}
-              onChange={e => setFormData(f => ({ ...f, phone: e.target.value }))}
+              label="Tasa de interés"
+              amount="interest_rate"
+              type="number"
+              value={formData.interest_rate}
+              onChange={e => setFormData(f => ({ ...f, interest_rate: e.target.value }))}
               fullWidth
             />
           </Grid>
           <Grid item xs={12} sm={6}>        
             <TextField
-              label="Dirección"
-              name="address"
-              value={formData.address}
-              onChange={e => setFormData(f => ({ ...f, address: e.target.value }))}
+              label="Fecha de inicio"
+              amount="start_date"
+              type="date"
+              value={formData.start_date}
+              onChange={e => setFormData(f => ({ ...f, start_date: e.target.value }))}
               fullWidth
             />
           </Grid>
