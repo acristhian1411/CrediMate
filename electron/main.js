@@ -71,7 +71,7 @@ async function createWindow () {
     // Open the DevTools in development mode
     win.webContents.openDevTools()
   } else {
-    await win.loadFile(path.join(process.cwd(), 'dist', 'index.html'))
+    await win.loadFile(path.join(process.cwd(), 'frontend', 'index.html'))
   }
 }
 

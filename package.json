@@ -28,8 +28,14 @@
       { "from": "electron/templates", "to": "templates" },
       { "from": "frontend/dist", "to": "frontdist" }
     ],
-    "win": { "target": "nsis" },
-    "linux": { "target": ["AppImage"] }
+    "win": { 
+      "target": "nsis",
+      "icon": "frontend/src/assets/AppLogo.png"
+    },
+    "linux": { 
+      "target": ["AppImage"],
+      "icon": "frontend/src/assets/AppLogo.png"
+    }
   },
   "keywords": [],
   "author": "Cristhian",
