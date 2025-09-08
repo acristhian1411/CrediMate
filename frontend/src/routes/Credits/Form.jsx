@@ -11,8 +11,9 @@ import {
 } from "@mui/material";
 import {api} from "../../api";
 import { formatNumber,disFormatNumber } from "../../utils/formatNumbers";
+import FormFees  from "../Fees/Form";
 
-export default function Form({onClose, edit, credit, showAlert}) {
+export default function FormCredit({onClose, edit, credit, showAlert}) {
   let date = new Date();
   const [formData, setFormData] = useState({
     id: credit?.id || "",
@@ -29,27 +30,42 @@ export default function Form({onClose, edit, credit, showAlert}) {
   const [clients,setClients]= useState([])
 
   const handleFeeAmountChange = (e) => {
-    console.log('e.target.value: ',e.target.value);
     // const value = parseFloat(disFormatNumber(e.target.value));
     const value = e.target.value
-    console.log('value: ',value);
     setFormData(f => ({ ...f, fee_amount: value }));
   };
 
-  const searchClient = async (e)=>{
-      const results = await api.credits.search(searchTerm);
-      setClients(results)
-  }
+  /**
+   * Asynchronously performs a search for clients based on a search term,
+   * and updates the state variable 'clients' with the results.
+   *
+   * @param {Event} e - The event object that triggered the search.
+   * @return {Promise<void>} - A Promise that resolves when the state variable
+   * has been updated.
+   */
+  const searchClient = async (e) => {
+    const results = await api.clients.search(e.target.value);
+    setClients(results);
+  };
 
   const loadClients = async () => {
     setClients(await api.clients.list())
   }
   
+  /**
+   * Updates the 'client_id' and 'client_name' fields of the 'formData' state
+   * variable based on the selected client.
+   *
+   * @param {Event} event - The event object that triggered the change.
+   * @param {Object} value - The selected client object with 'id' and 'name'
+   * properties.
+   * @return {void} This function does not return anything.
+   */
   function handleClientChange(event, value) { 
     setFormData((prev) => ({       
       ...prev,       
       client_id: value?.id || "",       
-      client_name: value?.name+' '+value?.lastname || "",     
+      client_name: value?.name ? `${value?.name} ${value?.lastname}` : "",     
     }));   
   }
 
@@ -84,60 +100,56 @@ export default function Form({onClose, edit, credit, showAlert}) {
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ maxWidth: 500, mx: "auto", mt: 4 }}
+      sx={{ maxWidth: 900, mx: "auto", mt: 4 }}
     >
       <Typography variant="h5" gutterBottom align="center" sx={{ mb: 3 }}>
         {edit ? "Editar Crédito" : "Crear nuevo Crédito"}
       </Typography>
       {/* <Stack spacing={2}> */}
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>    
             {/* 
             // TODO: Implementar búsqueda de clientes
             */}
-                    <Autocomplete           
-                      options={clients}           
-                      getOptionLabel={(option) => option.name+" "+ option.lastname}           
-                      onChange={handleClientChange}           
-                      
-                      onInputChange={(event, newInputValue, reason) => {             
-                        if(reason === 'input') {               
-                          searchClient(newInputValue);             }
-                      }}           
-                      value={             
-                        clients.find((c)=> c.id === formData.client_id) || null           
-                      }           
-                      renderInput={(params) => (             
-                        <TextField               
-                          {...params}               
-                          label="Cliente"               
-                          name="client_id"               
-                          fullWidth
-                          required               
-                          InputProps={{                 
-                            ...params.InputProps,                 
-                            endAdornment: (                   
-                              <React.Fragment>                     
-                                {params.InputProps.endAdornment}                     
-                                {formData.loading ? (                       
-                                  <CircularProgress color="inherit" size={20} />                     
-                                  ) : null}                  
-                              </React.Fragment>                 
-                            ),               
-                         }}             
-                        />           
-                      )}         
-                    />
-
-            {/* <TextField
-              label="Cliente"
-              amount="client_id"
-              value={formData.client_id}
-              onChange={e => setFormData(f => ({ ...f, client_id: e.target.value }))}
-              fullWidth
-            /> */}
+            <Box sx={{width:'235px'}}>
+              <Autocomplete           
+                options={clients}           
+                sx={{width: '100%'}}
+                getOptionLabel={(option) => option.name+" "+ option.lastname}           
+                onChange={handleClientChange}           
+                // fullWidth
+                onInputChange={(event, newInputValue, reason) => {             
+                  if(reason === 'input') {               
+                    searchClient(newInputValue);             }
+                }}           
+                value={             
+                  clients.find((c)=> c.id === formData.client_id) || null           
+                }           
+                renderInput={(params) => (             
+                  <TextField               
+                    {...params}               
+                    label="Cliente"               
+                    name="client_id"               
+                    // fullWidth
+                    required               
+                    // InputProps={{                 
+                    //   ...params.InputProps,                 
+                    //   endAdornment: (                   
+                    //     <React.Fragment>                     
+                    //       {params.InputProps.endAdornment}                     
+                    //       {formData.loading ? (                       
+                    //         <CircularProgress color="inherit" size={20} />                     
+                    //         ) : null}                  
+                    //     </React.Fragment>                 
+                    //   ),               
+                    // }}             
+                  />           
+                )}         
+              />
+            </Box>
+                
           </Grid>
-          <Grid item xs={12} sm={6}>        
+          <Grid item xs={3} sm={3}>        
             <TextField
               label="Monto total"
               amount="amount"
@@ -148,7 +160,7 @@ export default function Form({onClose, edit, credit, showAlert}) {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>        
+          <Grid item xs={3} sm={3}>        
             <TextField
               label="Cantidad de cuotas"
               amount="fees_qty"
@@ -159,7 +171,7 @@ export default function Form({onClose, edit, credit, showAlert}) {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>        
+          <Grid item xs={3} sm={3}>        
             <TextField
               label="Monto por cuota"
               amount="fee_amount"
@@ -184,11 +196,16 @@ export default function Form({onClose, edit, credit, showAlert}) {
               label="Fecha de inicio"
               amount="start_date"
               type="date"
+              sx={{ width: '235px' }}
               value={formData.start_date}
               onChange={e => setFormData(f => ({ ...f, start_date: e.target.value }))}
               fullWidth
             />
           </Grid>
+          <Grid item xs={12} sm={6}>        
+            <FormFees creditId={formData.id} creditData={formData} edit={!edit} showTitle={false} />
+          </Grid>
+        </Grid>
           <Grid item xs={12} sm={6}>        
             <Button variant="contained" color="primary" type="submit" sx={{ mr: 2 }}>
               {edit ? "Editar" : "Crear"}
@@ -197,7 +214,7 @@ export default function Form({onClose, edit, credit, showAlert}) {
               Cancelar
             </Button>
           </Grid>
-        </Grid>
+          
         
       {/* </Stack> */}
     </Box>

@@ -73,15 +73,7 @@ export default function CreditShow({setHeaderDescription}) {
             <Typography color="text.primary">{item.name}</Typography>
           </Breadcrumbs>
     
-          {/* Volver */}
-          <Button
-            startIcon={<ArrowBackIcon />}
-            variant="outlined"
-            onClick={() => navigate(-1)}
-            sx={{ mb: 2 }}
-          >
-            Volver
-          </Button>
+          
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
             {/* Card de detalle */}

@@ -17,14 +17,25 @@ import {
 } from '@mui/material';
 import AlertMessage from "@/components/Alert";
 import SearchIcon from "@mui/icons-material/Search";
+import MidModal  from '@/components/Modal';
 import {formatNumber} from '@/utils/formatNumbers';
+import Form from './Form';
 
 const FeesIndex = ({creditId}) => {
   const [fees, setFees] = useState([]);
   const [search, setSearch] = useState('');
+  const [openModal, setOpenModal] = useState(false);
 
   const load = async () => {
     setFees(await api.fees.listByCredit(creditId));
+  };
+
+  const openForm = () => {
+    setOpenModal(true);
+  };
+  
+  const closeForm = () => {
+    setOpenModal(false);
   };
 
   useEffect(() => {
@@ -50,11 +61,23 @@ const FeesIndex = ({creditId}) => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
+            
             <TableRow>
               <TableCell>Fecha de vencimiento</TableCell>
               <TableCell>Monto</TableCell>
               <TableCell>Estado</TableCell>
-              <TableCell>{""}</TableCell>
+              <TableCell>
+                {
+                  fees.length == 0 ? 
+                    <Button 
+                      variant="contained" 
+                      size="small"
+                      onClick={openForm}
+                    >
+                      Agregar cuota
+                    </Button> : ''
+                }
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -88,6 +111,13 @@ const FeesIndex = ({creditId}) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {
+        openModal && (
+          <MidModal open={openModal} onClose={closeForm}>
+            <Form creditId={creditId} setOpenModal={setOpenModal} />
+          </MidModal>
+        )
+      }
     </Box>
   );
 };
