@@ -33,6 +33,7 @@ export function initDB (dbPath) {
       status BOOLEAN DEFAULT false,
       amount REAL NOT NULL,
       amount_paid REAL DEFAULT 0,
+      expirate_at DATE NOT NULL,
       FOREIGN KEY(credit_id) REFERENCES credits(id)
     );
     CREATE TABLE IF NOT EXISTS payments (
@@ -80,9 +81,21 @@ export const dbAPI = {
   listCreditsByClient: (db, clientId) => db.prepare(`
     SELECT * FROM credits WHERE client_id=? ORDER BY id DESC
   `).all(clientId),
-  getCreditById: (db, id) => db.prepare(`SELECT * FROM credits WHERE id=?`).get(id),
+  getCreditById: (db, id) => db.prepare(`SELECT c.*, cl.name || ' ' || cl.lastname AS clientName,
+    cl.doc AS doc,
+    cl.email AS clientEmail,
+    cl.phone AS clientPhone,
+    cl.address AS clientAddress
+    FROM credits c
+    join clients cl on c.client_id = cl.id
+    where c.status = 'active'
+    and c.id=?`).get(id),
   listAllCredits: (db) => db.prepare(`
-    SELECT c.*, cl.name || ' ' || cl.lastname AS clientName
+    SELECT c.*, cl.name || ' ' || cl.lastname AS clientName,
+    cl.doc AS doc,
+    cl.email AS clientEmail,
+    cl.phone AS clientPhone,
+    cl.address AS clientAddress
     FROM credits c
     JOIN clients cl ON c.client_id = cl.id
     where c.status = 'active'
@@ -111,10 +124,10 @@ export const dbAPI = {
   `).run(status, id),
 
   getAllFeesByCredit: (db, creditId) => db.prepare(`
-    SELECT * FROM fees WHERE credit_id=? ORDER BY paid_at DESC
+    SELECT * FROM fees WHERE credit_id=? ORDER BY expirate_at asc
   `).all(creditId),
 
   getFeesByClient: (db, clientId) => db.prepare(`
-    SELECT * FROM fees WHERE credit_id IN (SELECT id FROM credits WHERE client_id=?) ORDER BY paid_at DESC
+    SELECT * FROM fees WHERE credit_id IN (SELECT id FROM credits WHERE client_id=?) ORDER BY expirate_at asc
   `).all(clientId)
 }

@@ -85,25 +85,26 @@ export default function CreditShow({setHeaderDescription}) {
           <Card>
             <CardContent>
               <Stack spacing={2}>
-                <Typography variant="h5"><b>Nombre: </b>{item.name}</Typography>
-                <Typography variant="body1" color="text.secondary">
-                  <b>Apellido: </b>{item.lastname}
-                </Typography>
+                <Typography variant="h5"><b>Nombre: </b>{item.clientName}</Typography>
                 <Typography variant="body1" color="text.secondary">
                   <b>Documento: </b>{item.doc}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
-                  <b>Correo: </b>{item.email}
+                  <b>Correo: </b>{item.clientEmail}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
-                  <b>Telefono: </b>{item.phone}
+                  <b>Telefono: </b>{item.clientPhone}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
-                  <b>Dirección: </b>{item.address}
+                  <b>Dirección: </b>{item.clientAddress}
                 </Typography>
+                <Typography variant="body1" color="text.secondary"><b>Monto: </b>{item.amount}</Typography>
+                <Typography variant="body1" color="text.secondary"><b>Fecha de inicio: </b>{item.start_date}</Typography>
+                <Typography variant="body1" color="text.secondary"><b>Estado: </b>{item.status == 'active' ? 'Activo' : 'Inactivo'}</Typography>
               </Stack>
             </CardContent>
           </Card>
+          
         </Box>
       );
 };
