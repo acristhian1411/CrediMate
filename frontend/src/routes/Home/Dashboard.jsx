@@ -14,7 +14,7 @@ export default function Dashboard() {
             gap: "2rem",
             marginTop: "2rem"
          }}>
-            <h1 align="center">Dashboard</h1>
+            <h1 align="center">Bienvenido</h1>
             {/* <div style={{ display: "flex", justifyItems:"center", alignItems:"center", gap: "2rem", marginTop: "2rem" }}> */}
             <Grid container spacing={2} justifyContent="center">
                 <Grid item>

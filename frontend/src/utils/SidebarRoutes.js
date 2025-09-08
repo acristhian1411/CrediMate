@@ -84,7 +84,7 @@ export const sidebarRoutes = [
         routes:[
             {
                 path: '/profile',
-                name: 'Profile',
+                name: 'Perfil',
                 icon: PersonIcon,
             }
         ]
