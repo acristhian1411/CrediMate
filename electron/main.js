@@ -112,6 +112,8 @@ ipcMain.handle('credits:getById', (_e, id) => dbAPI.getCreditById(db, id))
 ipcMain.handle('credits:create', (_e, payload) => dbAPI.createCredit(db, payload))
 ipcMain.handle('credits:updateStatus', (_e, payload) => dbAPI.updateCreditStatus(db, payload))
 
+ipcMain.handle('fees:listByCredit', (_e, creditId) => dbAPI.listFeesByCredit(db, creditId))
+
 ipcMain.handle('payments:listByCredit', (_e, creditId) => dbAPI.listPaymentsByCredit(db, creditId))
 ipcMain.handle('payments:register', (_e, payload) => dbAPI.registerPayment(db, payload))
 

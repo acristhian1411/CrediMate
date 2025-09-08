@@ -123,7 +123,7 @@ export const dbAPI = {
     UPDATE fees SET status=? WHERE id=?
   `).run(status, id),
 
-  getAllFeesByCredit: (db, creditId) => db.prepare(`
+  listFeesByCredit: (db, creditId) => db.prepare(`
     SELECT * FROM fees WHERE credit_id=? ORDER BY expirate_at asc
   `).all(creditId),
 
