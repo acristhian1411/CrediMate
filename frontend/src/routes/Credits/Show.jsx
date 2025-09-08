@@ -10,10 +10,12 @@ import {
     Alert,
     Button,
     Link,
-    Stack
+    Stack,
+    Grid
   } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { api } from '../../api';
+import FeesIndex from '../Fees/Index';
 
 export default function CreditShow({setHeaderDescription}) {
     const { id } = useParams();
@@ -80,31 +82,36 @@ export default function CreditShow({setHeaderDescription}) {
           >
             Volver
           </Button>
-    
-          {/* Card de detalle */}
-          <Card>
-            <CardContent>
-              <Stack spacing={2}>
-                <Typography variant="h5"><b>Nombre: </b>{item.clientName}</Typography>
-                <Typography variant="body1" color="text.secondary">
-                  <b>Documento: </b>{item.doc}
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  <b>Correo: </b>{item.clientEmail}
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  <b>Telefono: </b>{item.clientPhone}
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  <b>Dirección: </b>{item.clientAddress}
-                </Typography>
-                <Typography variant="body1" color="text.secondary"><b>Monto: </b>{item.amount}</Typography>
-                <Typography variant="body1" color="text.secondary"><b>Fecha de inicio: </b>{item.start_date}</Typography>
-                <Typography variant="body1" color="text.secondary"><b>Estado: </b>{item.status == 'active' ? 'Activo' : 'Inactivo'}</Typography>
-              </Stack>
-            </CardContent>
-          </Card>
-          
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+            {/* Card de detalle */}
+            <Card>
+              <CardContent>
+                <Stack spacing={2}>
+                  <Typography variant="h5"><b>Nombre: </b>{item.clientName}</Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    <b>Documento: </b>{item.doc}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    <b>Correo: </b>{item.clientEmail}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    <b>Telefono: </b>{item.clientPhone}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    <b>Dirección: </b>{item.clientAddress}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary"><b>Monto: </b>{item.amount}</Typography>
+                  <Typography variant="body1" color="text.secondary"><b>Fecha de inicio: </b>{item.start_date}</Typography>
+                  <Typography variant="body1" color="text.secondary"><b>Estado: </b>{item.status == 'active' ? 'Activo' : 'Inactivo'}</Typography>
+                </Stack>
+              </CardContent>
+            </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FeesIndex creditId={item.id} />
+            </Grid>
+          </Grid>
         </Box>
       );
 };
