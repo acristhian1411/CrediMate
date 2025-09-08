@@ -85,6 +85,7 @@ export const dbAPI = {
     SELECT c.*, cl.name || ' ' || cl.lastname AS clientName
     FROM credits c
     JOIN clients cl ON c.client_id = cl.id
+    where c.status = 'active'
     ORDER BY c.id DESC
   `).all(),
   createCredit: (db, cr) => db.prepare(`

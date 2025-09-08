@@ -78,7 +78,7 @@ export default function CreditsIndex({setHeaderDescription}) {
 
         const handleDelete = async () => {
         try {
-          await api.credits.remove(credit.id);
+          await api.credits.updateStatus({id: credit.id, status: 'inactive'});
           showAlert("Crédito se eliminó con éxito", "success");
           setOpenDelete(false);
           load();
@@ -92,7 +92,7 @@ export default function CreditsIndex({setHeaderDescription}) {
     <div style={{ padding: 16 }}>
       {/* <h1 align="center">Lista de Clientes</h1> */}
         <TextField 
-            label="Buscar crédito por cliente" 
+            label="Buscar crédito por crédito" 
             variant="outlined" 
             style={{ marginBottom: 20, width: '100%', marginTop: 16 }} 
             onKeyDown={(e) => {
@@ -191,8 +191,8 @@ export default function CreditsIndex({setHeaderDescription}) {
                     open={openDelete}
                     onClose={() => setOpenDelete(false)}
                     onConfirm={handleDelete}
-                    title="Eliminar cliente"
-                    message="Está seguro de eliminar este cliente?"
+                    title="Eliminar crédito"
+                    message="Está seguro de eliminar este crédito?"
                 />
             </Suspense>
 
