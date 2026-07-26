@@ -25,15 +25,23 @@
       "templates/**"
     ],
     "extraResources": [
-      { "from": "electron/templates", "to": "templates" },
-      { "from": "frontend/dist", "to": "frontdist" }
+      {
+        "from": "electron/templates",
+        "to": "templates"
+      },
+      {
+        "from": "frontend/dist",
+        "to": "frontdist"
+      }
     ],
-    "win": { 
+    "win": {
       "target": "nsis",
       "icon": "frontend/src/assets/AppLogo.png"
     },
-    "linux": { 
-      "target": ["AppImage"],
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
       "icon": "frontend/src/assets/AppLogo.png"
     }
   },
@@ -45,13 +53,16 @@
   "dependencies": {
     "better-sqlite3": "^12.2.0",
     "date-fns": "^4.1.0",
-    "handlebars": "^4.7.8"
+    "drizzle-orm": "^0.45.2",
+    "handlebars": "^4.7.8",
+    "pg": "^8.22.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.0",
     "concurrently": "^9.2.0",
-    "electron": "^37.2.6",
     "cross-env": "^10.0.0",
+    "drizzle-kit": "^0.31.10",
+    "electron": "^37.2.6",
     "electron-builder": "^26.0.12",
     "vite": "^7.1.2",
     "wait-on": "^8.0.4"

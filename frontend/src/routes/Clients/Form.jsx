@@ -24,7 +24,16 @@ export default function Form({onClose, edit, client, showAlert}) {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await api.clients.create(formData)
+      const payload = {
+        doc: formData.doc ?? "",
+        name: formData.name ?? "",
+        lastname: formData.lastname ?? "",
+        email: formData.email ?? "",
+        phone: formData.phone ?? "",
+        address: formData.address ?? "",
+      };
+
+      await api.clients.create(payload);
       showAlert("Cliente creado exitosamente", "success");
     } catch (err) {
       console.error(err);
@@ -34,7 +43,17 @@ export default function Form({onClose, edit, client, showAlert}) {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
-      await api.clients.update(formData);
+      const payload = {
+        id: Number(formData.id) || undefined,
+        doc: formData.doc ?? "",
+        name: formData.name ?? "",
+        lastname: formData.lastname ?? "",
+        email: formData.email ?? "",
+        phone: formData.phone ?? "",
+        address: formData.address ?? "",
+      };
+
+      await api.clients.update(payload);
       showAlert("Cliente editado exitosamente", "success");
     } catch (err) {
       console.error(err);
