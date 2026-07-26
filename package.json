@@ -4,7 +4,8 @@
   "description": "",
   "main": "electron/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "pnpm run test:backend",
+    "test:backend": "cross-env ELECTRON_RUN_AS_NODE=1 electron --test tests/backend/repository.test.js",
     "migrate": "node electron/migrate.js",
     "dev": "concurrently -k \"npm:dev:react\" \"npm:dev:electron\"",
     "dev:react": "cd frontend && vite",

@@ -23,8 +23,10 @@ contextBridge.exposeInMainWorld("api", {
     listByClient: (clientId) =>
       ipcRenderer.invoke("credits:listByClient", clientId),
     listAll: () => ipcRenderer.invoke("credits:listAll"),
+    search: (searchTerm) => ipcRenderer.invoke("credits:search", searchTerm),
     getById: (id) => ipcRenderer.invoke("credits:getById", id),
     create: (data) => ipcRenderer.invoke("credits:create", data),
+    update: (data) => ipcRenderer.invoke("credits:update", data),
     updateStatus: (data) => ipcRenderer.invoke("credits:updateStatus", data),
   },
   payments: {
@@ -39,6 +41,8 @@ contextBridge.exposeInMainWorld("api", {
   fees: {
     listByCredit: (creditId) =>
       ipcRenderer.invoke("fees:listByCredit", creditId),
+    create: (data) => ipcRenderer.invoke("fees:create", data),
+    update: (id, fees) => ipcRenderer.invoke("fees:update", { id, fees }),
     updateStatus: (data) => ipcRenderer.invoke("fees:updateStatus", data),
     getAllByCredit: (creditId) =>
       ipcRenderer.invoke("fees:getAllByCredit", creditId),

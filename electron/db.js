@@ -59,9 +59,19 @@ export const dbAPI = {
     return repository.listAllCredits(db, schema);
   },
 
+  searchCredits: async (context, searchTerm) => {
+    const { db, schema } = await resolveContext(context);
+    return repository.searchCredits(db, schema, searchTerm);
+  },
+
   createCredit: async (context, cr) => {
     const { db, schema } = await resolveContext(context);
     return repository.createCredit(db, schema, cr);
+  },
+
+  updateCredit: async (context, cr) => {
+    const { db, schema } = await resolveContext(context);
+    return repository.updateCredit(db, schema, cr);
   },
 
   updateCreditStatus: async (context, payload) => {
@@ -82,6 +92,17 @@ export const dbAPI = {
   updateFeeStatus: async (context, payload) => {
     const { db, schema } = await resolveContext(context);
     return repository.updateFeeStatus(db, schema, payload);
+  },
+
+  createFees: async (context, payload) => {
+    const { db, schema } = await resolveContext(context);
+    return repository.createFees(db, schema, payload);
+  },
+
+  updateFees: async (context, payload) => {
+    const { db, schema } = await resolveContext(context);
+    const { id, fees } = payload || {};
+    return repository.updateFees(db, schema, id, fees);
   },
 
   listFeesByCredit: async (context, creditId) => {

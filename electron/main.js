@@ -1,10 +1,9 @@
-import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
 import { initDB, dbAPI } from "./db.js";
 import { printContract, printReceipt } from "./print.js";
-import { run } from "node:test";
 import Database from "better-sqlite3";
 import { registerSetupHandlers } from "./ipc/setup.js";
 import { hasConfig } from "./config.js";
@@ -127,9 +126,15 @@ ipcMain.handle("credits:listByClient", (_e, clientId) =>
   dbAPI.listCreditsByClient(db, clientId),
 );
 ipcMain.handle("credits:listAll", () => dbAPI.listAllCredits(db));
+ipcMain.handle("credits:search", (_e, searchTerm) =>
+  dbAPI.searchCredits(db, searchTerm),
+);
 ipcMain.handle("credits:getById", (_e, id) => dbAPI.getCreditById(db, id));
 ipcMain.handle("credits:create", (_e, payload) =>
   dbAPI.createCredit(db, payload),
+);
+ipcMain.handle("credits:update", (_e, payload) =>
+  dbAPI.updateCredit(db, payload),
 );
 ipcMain.handle("credits:updateStatus", (_e, payload) =>
   dbAPI.updateCreditStatus(db, payload),
@@ -138,6 +143,17 @@ ipcMain.handle("credits:updateStatus", (_e, payload) =>
 ipcMain.handle("fees:listByCredit", (_e, creditId) =>
   dbAPI.listFeesByCredit(db, creditId),
 );
+ipcMain.handle("fees:getAllByCredit", (_e, creditId) =>
+  dbAPI.listFeesByCredit(db, creditId),
+);
+ipcMain.handle("fees:getByClient", (_e, clientId) =>
+  dbAPI.getFeesByClient(db, clientId),
+);
+ipcMain.handle("fees:updateStatus", (_e, payload) =>
+  dbAPI.updateFeeStatus(db, payload),
+);
+ipcMain.handle("fees:create", (_e, payload) => dbAPI.createFees(db, payload));
+ipcMain.handle("fees:update", (_e, payload) => dbAPI.updateFees(db, payload));
 
 ipcMain.handle("payments:listByCredit", (_e, creditId) =>
   dbAPI.listPaymentsByCredit(db, creditId),
