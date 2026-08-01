@@ -1,54 +1,55 @@
 # 💳 CreditMate
 
-**CreditMate** es una aplicación de escritorio multiplataforma desarrollada con **Electron + React + SQLite** para la gestión simple y rápida de créditos y finanzas personales.
+**CreditMate** es una aplicación de escritorio multiplataforma desarrollada con **Electron + React + SQLite/PostgreSQL** para la gestión simple y rápida de créditos y finanzas personales.
 
 ## 🚀 Características
 
-* ✅ Gestión de clientes y créditos
-* ✅ Reportes básicos de ingresos y egresos
-* ✅ Almacenamiento local con SQLite
-* ✅ Soporte para modo **oscuro / claro**
-* ✅ Interfaz moderna y minimalista con React
+- ✅ Gestión de clientes y créditos
+- ✅ Reportes básicos de ingresos y egresos
+- ✅ Almacenamiento local con SQLite
+- ✅ Soporte para modo **oscuro / claro**
+- ✅ Interfaz moderna y minimalista con React
 
 ## 🛠️ Tecnologías utilizadas
 
-* [Electron](https://www.electronjs.org/) – Contenedor para apps de escritorio
-* [React](https://react.dev/) – Frontend moderno
-* [SQLite](https://www.sqlite.org/) – Base de datos ligera
-* [Zustand](https://zustand-demo.pmnd.rs/) – Manejo de estado global
-* [Vite](https://vitejs.dev/) – Empaquetador rápido
+- [Electron](https://www.electronjs.org/) – Contenedor para apps de escritorio
+- [React](https://react.dev/) – Frontend moderno
+- [SQLite](https://www.sqlite.org/) – Base de datos ligera
+- [Zustand](https://zustand-demo.pmnd.rs/) – Manejo de estado global
+- [Vite](https://vitejs.dev/) – Empaquetador rápido
 
 ## 📦 Instalación y uso
 
 Clona el repositorio:
 
 ```bash
-git clone https://github.com/tuusuario/creditmate.git
+git clone https://github.com/acristhian1411/creditmate.git
 cd creditmate
 ```
 
-Instala las dependencias:
+Instala las dependencias de electron:
 
 ```bash
-npm install
+pnpm install
 ```
 
-Ejecuta en modo desarrollo:
+Instala dependencias de react:
 
 ```bash
-npm run dev
+cd frontend
+pnpm install
+```
+
+Ejecuta en modo desarrollo desde la carpeta raiz:
+
+```bash
+pnpm run dev
 ```
 
 Compila la app:
 
 ```bash
-npm run build
-```
-
-Genera el instalador (Windows):
-
-```bash
-npm run dist
+pnpm run build --win o --linux
 ```
 
 ## 📂 Estructura del proyecto
