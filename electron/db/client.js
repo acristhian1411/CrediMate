@@ -164,6 +164,70 @@ async function ensureDatabaseReady(engine, sqlite, pool) {
   }
 }
 
+function normalizeConfig(config) {
+  if (!config || config.engine === "sqlite") {
+    return { engine: "sqlite" };
+  }
+
+  return {
+    engine: "postgres",
+    postgres: {
+      host: config.postgres?.host,
+      port: Number(config.postgres?.port) || 5432,
+      database: config.postgres?.database,
+      user: config.postgres?.user,
+      password: config.postgres?.password,
+      ssl: !!config.postgres?.ssl,
+    },
+  };
+}
+
+function withClosableContext(base, closer) {
+  return {
+    ...base,
+    async close() {
+      await closer();
+    },
+  };
+}
+
+async function createContextFromConfig(config, sqlitePath) {
+  const normalized = normalizeConfig(config);
+
+  if (normalized.engine === "sqlite") {
+    const sqlite = new Database(sqlitePath);
+    sqlite.pragma("journal_mode = WAL");
+    await ensureDatabaseReady("sqlite", sqlite);
+
+    return withClosableContext(
+      {
+        db: drizzleSqlite(sqlite, { schema: sqliteSchema }),
+        schema: sqliteSchema,
+        engine: "sqlite",
+        raw: sqlite,
+      },
+      async () => {
+        sqlite.close();
+      },
+    );
+  }
+
+  const pool = new pg.Pool(normalized.postgres);
+  await ensureDatabaseReady("postgres", null, pool);
+
+  return withClosableContext(
+    {
+      db: drizzlePg(pool, { schema: postgresSchema }),
+      schema: postgresSchema,
+      engine: "postgres",
+      raw: pool,
+    },
+    async () => {
+      await pool.end();
+    },
+  );
+}
+
 /**
  * Crea (una sola vez) el cliente de base de datos según db-config.json.
  * sqlitePath solo se usa si el motor configurado es sqlite.
@@ -176,28 +240,28 @@ async function ensureDatabaseReady(engine, sqlite, pool) {
 export async function getDbClient(sqlitePath) {
   if (cached) return cached;
 
-  const config = readConfig();
+  const config = normalizeConfig(readConfig());
   const resolvedSqlitePath =
     sqlitePath || path.join(app.getPath("userData"), "creditmate.db");
 
-  if (!config || config.engine === "sqlite") {
-    const sqlite = new Database(resolvedSqlitePath);
-    sqlite.pragma("journal_mode = WAL");
-    await ensureDatabaseReady("sqlite", sqlite);
-    cached = {
-      db: drizzleSqlite(sqlite, { schema: sqliteSchema }),
-      schema: sqliteSchema,
-      engine: "sqlite",
-    };
-    return cached;
-  }
-
-  const pool = new pg.Pool(config.postgres);
-  await ensureDatabaseReady("postgres", null, pool);
-  cached = {
-    db: drizzlePg(pool, { schema: postgresSchema }),
-    schema: postgresSchema,
-    engine: "postgres",
-  };
+  cached = await createContextFromConfig(config, resolvedSqlitePath);
   return cached;
+}
+
+export async function getDbClientFromConfig(config, sqlitePath) {
+  const resolvedSqlitePath =
+    sqlitePath || path.join(app.getPath("userData"), "creditmate.db");
+  return createContextFromConfig(config, resolvedSqlitePath);
+}
+
+export async function closeDbClient(context = cached) {
+  if (!context?.close) return;
+  await context.close();
+}
+
+export async function resetDbClient() {
+  if (cached?.close) {
+    await cached.close();
+  }
+  cached = null;
 }

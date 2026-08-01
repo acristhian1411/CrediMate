@@ -7,6 +7,11 @@ contextBridge.exposeInMainWorld("setupApi", {
   saveConfig: (config) => ipcRenderer.invoke("setup:save-config", config),
 });
 
+contextBridge.exposeInMainWorld("migrationApi", {
+  getCurrentConfig: () => ipcRenderer.invoke("migration:get-current-config"),
+  run: (payload) => ipcRenderer.invoke("migration:run", payload),
+});
+
 contextBridge.exposeInMainWorld("api", {
   send: (channel, data) => ipcRenderer.send(channel, data),
   receive: (channel, func) =>

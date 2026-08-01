@@ -6,6 +6,7 @@ import { initDB, dbAPI } from "./db.js";
 import { printContract, printReceipt } from "./print.js";
 import Database from "better-sqlite3";
 import { registerSetupHandlers } from "./ipc/setup.js";
+import { registerMigrationHandlers } from "./ipc/migration.js";
 import { hasConfig } from "./config.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -90,6 +91,9 @@ async function createWindow() {
 
 app.whenReady().then(async () => {
   registerSetupHandlers();
+  registerMigrationHandlers({
+    getDbContext: () => db,
+  });
 
   // DB en ruta de usuario (portable y segura)
   const dbDir = app.getPath("userData");
